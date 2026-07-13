@@ -43,7 +43,7 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     route: '/calculator/inheritance',
     learnArticleId: 'inheritance',
     phase: 1,
-    enabled: false,
+    enabled: true,
   },
   {
     id: 'prayer-times',
