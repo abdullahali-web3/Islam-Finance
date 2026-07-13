@@ -86,7 +86,7 @@ Anything the drafting agent was unsure of — never silently resolved.
 | Domain | Status | Last updated | Scope |
 |---|---|---|---|
 | zakat | research-provisional | 2026-07-13 | Cash, gold/silver (incl. jewelry), business inventory |
-| inheritance | — | — | Fara'id: fixed shares, 'Awl, Radd, named special cases |
+| inheritance | research-provisional | 2026-07-13 | Fara'id: fixed shares, ḥajb, ʿAwl, Radd (+Bayt al-Māl divergence), grandfather+siblings, named cases |
 | fitrana | — | — | Zakat al-Fitr per-person amount |
 | qurbani | — | — | Udhiyah nisab eligibility check |
 | prayer-times-qibla | — | — | Prayer times + Qibla direction |
