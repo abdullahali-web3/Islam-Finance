@@ -1,7 +1,7 @@
 ---
 domain: inheritance
 status: research-provisional
-version: 0.1
+version: 0.2
 last_updated: 2026-07-13
 scholar_reviewer: unassigned
 madhab_dependent: true
@@ -25,17 +25,18 @@ other heirs' consent). V1 takes that net figure as input (with an optional ⅓-b
 not manage the debts/bequests ledger itself.
 
 **V1 heirs covered:** spouse(s) (husband, or up to four wives sharing one portion); father; mother;
-sons; daughters; paternal grandfather (when no father); paternal & maternal grandmothers; full,
-consanguine (paternal-only), and uterine (maternal-only) siblings. Includes fixed shares (furūḍ),
-residuary inheritance (taʿṣīb), blocking (ḥajb), ʿAwl, and Radd (with its madhab/diaspora divergence).
+sons; daughters; **grandchildren through a son (son's son and son's daughter, one generation down)**;
+paternal grandfather (when no father); paternal & maternal grandmothers; full, consanguine
+(paternal-only), and uterine (maternal-only) siblings. Includes fixed shares (furūḍ), residuary
+inheritance (taʿṣīb), blocking (ḥajb), ʿAwl, and Radd (with its madhab/diaspora divergence).
 
-**Deferred to V2+ (documented so `new-calculator` doesn't double-scaffold):** grandchildren through a
-son (son's son / son's daughter as substitutes for children); residuaries more distant than siblings
-(paternal uncles, nephews, cousins — ʿaṣaba bi-nafsihi beyond brothers); dhawū al-arḥām (distant
-kindred) when no fixed-share/residuary heir remains; the rarest named cases (e.g. al-Akdariyya beyond
-a documented note); khunthā (intersex) and mafqūd (missing person) cases; and non-Sunni schemes
-(Jaʿfarī etc.). These are **out of V1 scope**, flagged for the user, and must be shown as "not yet
-supported" rather than silently mis-distributed.
+**Deferred to V2+ (documented so `new-calculator` doesn't double-scaffold):** descendants **more than
+one generation** below through a son (great-grandchildren and deeper — multi-level agnatic
+substitution); residuaries more distant than siblings (paternal uncles, nephews, cousins — ʿaṣaba
+bi-nafsihi beyond brothers); dhawū al-arḥām (distant kindred) when no fixed-share/residuary heir
+remains; the rarest named cases (e.g. al-Akdariyya beyond a documented note); khunthā (intersex) and
+mafqūd (missing person) cases; and non-Sunni schemes (Jaʿfarī etc.). These are **out of V1 scope**,
+flagged for the user, and must be shown as "not yet supported" rather than silently mis-distributed.
 
 ## Definitions & Terminology
 
@@ -74,7 +75,8 @@ Inheritance has no nisab. The fixed "constants" are the six Qurʾānic fractions
 
 ### Fixed shares (aṣḥāb al-furūḍ) — heir → share, by condition
 
-"Descendant" below = an inheriting son, daughter, or son's-son/daughter (V1: son or daughter).
+"Descendant" below = an inheriting son, daughter, son's son, or son's daughter. "Male descendant" =
+son **or son's son** (matters for the father's ⅙-only rule and for blocking collaterals).
 
 | Heir | Share | Condition |
 |---|---|---|
@@ -91,6 +93,11 @@ Inheritance has no nisab. The fixed "constants" are the six Qurʾānic fractions
 | | ⅔ | two or more daughters, no son |
 | | residuary 2:1 with son | when any son is present |
 | **Son** | residuary (ʿaṣaba), 2:1 with daughters | always residuary |
+| **Son's son** (grandson via a son) | residuary, 2:1 with son's daughters at his level | only if **no son**; **excluded by a son**; is a "male descendant" |
+| **Son's daughter** (granddaughter via a son) | ½ (one) / ⅔ (two+) | no son, no son's son, **and no daughter** |
+| | **⅙** (to complete the ⅔) | with exactly **one daughter** (who takes ½), and no son / no son's son |
+| | residuary 2:1 **with a son's son** | whenever a son's son is present (even alongside a daughter) |
+| | excluded (0) | with a **son**, or with **two+ daughters** and **no son's son** |
 | **Paternal grandfather** (only if **no father**) | like the father (⅙ / ⅙+residue / residuary) | **except** the grandfather-with-siblings divergence (below) |
 | **Grandmother(s)** (maternal and/or paternal) | ⅙ (shared if more than one) | maternal grandmother excluded by the **mother**; paternal grandmother excluded by the **father** (and by the mother) |
 | **Full sister(s)** | ½ (one) / ⅔ (two+) | no descendant, no father/grandfather, no full brother |
@@ -104,10 +111,12 @@ Inheritance has no nisab. The fixed "constants" are the six Qurʾānic fractions
 
 1. **Net estate** `E` = assets − funeral − debts − valid bequests (≤ ⅓ to non-heirs). *Input to V1.*
 2. **Resolve ḥajb** (blocking) — remove excluded heirs:
-   - A **son** excludes: all siblings (full/consanguine/uterine), grandmother? no — excludes son's
-     children and all brothers/sisters.
+   - A **son** excludes: all siblings (full/consanguine/uterine), **and the son's son and son's
+     daughter** (grandchildren via a son), and all brothers/sisters.
+   - A **son's son** (a male descendant), when no son, likewise excludes collateral siblings.
    - The **father** excludes: all siblings, the (paternal) grandfather, the paternal grandmother.
-   - **Any descendant** (son/daughter) excludes: **uterine** siblings.
+   - **Any descendant** (son, daughter, son's son, or son's daughter) excludes: **uterine** siblings,
+     and reduces the spouse's and mother's shares.
    - The **mother** excludes: all grandmothers.
    - A **full brother** excludes: consanguine siblings (and consanguine brother excludes their
      residuary standing), plus (with father/son) is himself excluded.
@@ -188,6 +197,14 @@ illustrative). These become unit-test fixtures verbatim.
    Husband ½ = **30,000**; mother ⅙ = **10,000**; uterine ⅓ = 20,000. **Hanafi/Hanbali:** full brothers
    **0**, uterine split 20,000 → 10,000 each. **Shafiʿi/Maliki:** the 20,000 is split equally among all
    four (2 uterine + 2 full) → **5,000 each**.
+9. **Granddaughter completes the ⅔ (takmila).** 1 daughter + 1 son's daughter + mother + father,
+   `E = 60,000`, no son/son's-son/spouse. Daughter ½ = **30,000**; son's daughter ⅙ (completes ⅔) =
+   **10,000**; mother ⅙ = **10,000**; father ⅙ (female-only descendants, but here the residue is 0) =
+   **10,000**. (Fixed shares sum to exactly 1.)
+10. **Grandson as residuary (with a daughter).** 1 daughter + 1 son's son + 1 son's daughter + father,
+    `E = 90,000`, no son/spouse. Daughter ½ = **45,000**; father ⅙ (a male descendant — the son's son —
+    is present) = **15,000**; residue 30,000 to son's son : son's daughter = 2:1 → son's son **20,000**,
+    son's daughter **10,000**.
 
 ## Public Explanation Notes
 
@@ -251,7 +268,8 @@ illustrative). These become unit-test fixtures verbatim.
 | D6 | Umariyyatān | Mother = ⅓ of the **remainder after spouse** when heirs = spouse + both parents | Named case, all agree | engine |
 | D7 | Residuary ratio | Male : female = **2 : 1** (uterine siblings **1:1**, fixed-share only) | Qurʾān 4:11 / 4:12 | engine |
 | D8 | Bequest cap | Waṣiyyah ≤ **⅓** to non-heirs (V1 input is the *net* estate; optional ⅓ helper) | Hadith / consensus (D6 defs) | schema helper |
-| D9 | Al-Akdariyya, grandchildren-via-son, distant ʿaṣaba, dhawū al-arḥām | **Not supported in V1** — detected and surfaced as "not yet supported," never mis-distributed | Scope (flag 5) | engine guard |
+| D9 | Al-Akdariyya, **great-grandchildren+ (deeper than one level)**, distant ʿaṣaba, dhawū al-arḥām | **Not supported in V1** — detected and surfaced as "not yet supported," never mis-distributed | Scope (flag 5) | engine guard |
+| D10 | Grandchildren via a son (one level: son's son / son's daughter) | **Supported in V1.** Son's son = residuary substituting for a son (blocked by a son). Son's daughter: ½/⅔ alone; **⅙ to complete ⅔ with one daughter**; residuary 2:1 with a son's son; blocked by a son or by ≥2 daughters (absent a son's son). | Fixed-shares table + worked examples 9–10 | engine |
 
 Because of the disclaimer + these documented defaults, none of the flagged uncertainties block the V1
 build; each is a knob the scholar review can turn (RuleModule files, the engine's ʿawl/radd steps, or a
@@ -262,3 +280,4 @@ future surplus-destination setting).
 | Date | Version | Change | Requested by |
 |---|---|---|---|
 | 2026-07-13 | 0.1 | Initial researched draft at status research-provisional (ADR 0013): fixed-share tables, ḥajb, ʿAwl, Radd (+ diaspora/Bayt al-Māl divergence), grandfather+siblings & Mushtaraka divergences, named cases, 8 worked examples, Implementation Defaults D1–D9, V1 scope + deferrals. | user |
+| 2026-07-13 | 0.2 | Added **grandchildren through a son** (son's son / son's daughter, one level) to V1 per user: fixed-share rows (incl. ⅙ takmila and residuary-with-grandson), ḥajb updates, worked examples 9–10, D10; moved only great-grandchildren+ to deferred (D9). | user |
