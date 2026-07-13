@@ -20,7 +20,8 @@ the project for keeping later calculators cheap.
 4. **UI**: delegate to `calculator-ui-builder` to build `features/<domain>/`, using the same
    reference domain's screen as template.
 5. **Home hub**: add one entry to the single-source-of-truth registry
-   `features/home/calculatorRegistry.ts` (card title, icon, route, i18n key).
+   `features/home/registry.ts` (card title, icon, route, i18n key) — delegate to the
+   `register-calculator` skill, which owns that wiring (ADR 0006). Never hand-edit a Home screen.
 6. **i18n**: add stub files `locales/en/<domain>.json` and `locales/ur/<domain>.json`.
 7. **Learn article**: delegate to `learn-content-writer` for `features/learn/content/<domain>.mdx`,
    and link it from the new calculator's result screen ("How this works").

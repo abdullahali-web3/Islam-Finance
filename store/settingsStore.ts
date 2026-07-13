@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 import { storage } from '@/services/storage';
+import type { CurrencyCode } from '@/core/shared';
 
 export type Madhab = 'hanafi' | 'shafii' | 'maliki' | 'hanbali';
 export type Language = 'en' | 'ur';
@@ -18,24 +19,55 @@ type SettingsState = {
   madhab: Madhab;
   language: Language;
   colorScheme: ColorSchemePreference;
+  /** Default display currency, chosen at onboarding (ADR 0009). */
+  currency: CurrencyCode;
+  /** Registry ids the user has favorited (ADR 0006). Order = insertion order. */
+  favorites: string[];
+  /** False until the first-run onboarding flow completes; gates the onboarding redirect. */
+  onboarded: boolean;
   setMadhab: (madhab: Madhab) => void;
   setLanguage: (language: Language) => void;
   setColorScheme: (colorScheme: ColorSchemePreference) => void;
+  setCurrency: (currency: CurrencyCode) => void;
+  toggleFavorite: (id: string) => void;
+  isFavorite: (id: string) => boolean;
+  completeOnboarding: () => void;
 };
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       madhab: 'hanafi',
       language: 'en',
       colorScheme: 'system',
+      currency: 'USD',
+      favorites: [],
+      onboarded: false,
       setMadhab: (madhab) => set({ madhab }),
       setLanguage: (language) => set({ language }),
       setColorScheme: (colorScheme) => set({ colorScheme }),
+      setCurrency: (currency) => set({ currency }),
+      toggleFavorite: (id) =>
+        set((s) => ({
+          favorites: s.favorites.includes(id)
+            ? s.favorites.filter((f) => f !== id)
+            : [...s.favorites, id],
+        })),
+      isFavorite: (id) => get().favorites.includes(id),
+      completeOnboarding: () => set({ onboarded: true }),
     }),
     {
       name: 'settings-store',
       storage: createJSONStorage(() => mmkvStorage),
+      // Only persist data, not the action functions.
+      partialize: (s) => ({
+        madhab: s.madhab,
+        language: s.language,
+        colorScheme: s.colorScheme,
+        currency: s.currency,
+        favorites: s.favorites,
+        onboarded: s.onboarded,
+      }),
     }
   )
 );

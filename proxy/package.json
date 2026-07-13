@@ -1,0 +1,14 @@
+{
+  "name": "islamfinance-price-proxy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Serverless gold/silver price proxy for IslamFinance (ADR 0008). Holds the metal-price provider API key so the app never does. Deployed independently from the app.",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy --prod"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.2.0",
+    "typescript": "^5.5.0"
+  }
+}

@@ -1,8 +1,9 @@
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenContainer } from '@/components/ScreenContainer';
-import { EmptyState } from '@/components/EmptyState';
 import { HomeHeader } from '@/features/home/HomeHeader';
+import { FavoritesRow } from '@/features/home/FavoritesRow';
+import { CalculatorGrid } from '@/features/home/CalculatorGrid';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -16,9 +17,15 @@ export default function HomeScreen() {
       >
         <HomeHeader />
 
-        {/* Calculator hub grid — empty until the first calculators land in Phase 1. */}
-        <View className="mt-6 min-h-[240px]">
-          <EmptyState title={t('home.emptyTitle')} subtitle={t('home.emptySubtitle')} />
+        {/* Quick access to favorited calculators — hidden until the user favorites one. */}
+        <FavoritesRow />
+
+        {/* Calculator hub grid — rendered from the registry (ADR 0006), never hand-wired. */}
+        <View className="mt-6">
+          <Text className="mb-3 text-sm font-semibold text-neutral-500 dark:text-neutral-300">
+            {t('home.calculators')}
+          </Text>
+          <CalculatorGrid />
         </View>
       </ScrollView>
     </ScreenContainer>

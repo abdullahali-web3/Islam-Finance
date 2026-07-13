@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import i18next from '@/locales/i18n';
 import { ScreenContainer } from '@/components/ScreenContainer';
+import { SUPPORTED_CURRENCIES, type CurrencyCode } from '@/core/shared';
 import {
   useSettingsStore,
   type Madhab,
@@ -58,7 +59,7 @@ function SettingRow<T extends string>({
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
-  const { madhab, language, colorScheme, setMadhab, setLanguage, setColorScheme } =
+  const { madhab, language, colorScheme, currency, setMadhab, setLanguage, setColorScheme, setCurrency } =
     useSettingsStore();
 
   const madhabOptions: { key: Madhab; label: string }[] = [
@@ -78,6 +79,11 @@ export default function SettingsScreen() {
     { key: 'dark', label: t('settings.appearance.dark') },
     { key: 'system', label: t('settings.appearance.system') },
   ];
+
+  const currencyOptions: { key: CurrencyCode; label: string }[] = SUPPORTED_CURRENCIES.map((c) => ({
+    key: c.code,
+    label: `${c.code} ${c.symbol}`,
+  }));
 
   const handleLanguage = (next: Language) => {
     setLanguage(next);
@@ -104,6 +110,12 @@ export default function SettingsScreen() {
           onChange={handleLanguage}
         />
         <SettingRow
+          label={t('settings.currency')}
+          value={currency}
+          options={currencyOptions}
+          onChange={setCurrency}
+        />
+        <SettingRow
           label={t('settings.appearance')}
           value={colorScheme}
           options={appearanceOptions}
@@ -111,9 +123,14 @@ export default function SettingsScreen() {
         />
 
         {__DEV__ ? (
-          <Link href="/dev/calculator-form-demo" className="mt-4 text-sm font-medium text-green-500">
-            Dev: Form demo
-          </Link>
+          <View className="mt-4 gap-2">
+            <Link href="/dev/calculator-form-demo" className="text-sm font-medium text-green-500">
+              Dev: Form demo
+            </Link>
+            <Link href="/dev/design-system" className="text-sm font-medium text-green-500">
+              Dev: Design system
+            </Link>
+          </View>
         ) : null}
       </ScrollView>
     </ScreenContainer>

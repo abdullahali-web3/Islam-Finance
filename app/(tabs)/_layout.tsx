@@ -1,11 +1,19 @@
-import { Tabs } from 'expo-router';
+import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppTheme } from '@/components/useAppTheme';
+import { useSettingsStore } from '@/store/settingsStore';
 
 export default function TabsLayout() {
   const { t } = useTranslation();
   const theme = useAppTheme();
+  const onboarded = useSettingsStore((s) => s.onboarded);
+
+  // First-run gate (ADR 0006 / roadmap §1): send new users through onboarding before the hub.
+  // MMKV-backed persistence is synchronous, so `onboarded` is correct on the first render.
+  if (!onboarded) {
+    return <Redirect href="/onboarding" />;
+  }
 
   return (
     <Tabs

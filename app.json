@@ -24,7 +24,12 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store"
-    ]
+      "expo-secure-store",
+      "expo-notifications"
+    ],
+    "extra": {
+      "comment": "priceProxyUrl is the PUBLIC url of the gold/silver price proxy (ADR 0008). It is NOT a secret — the provider API key lives only inside the proxy (see /proxy). Empty until the proxy is deployed; the app then runs on cache/manual-override pricing.",
+      "priceProxyUrl": ""
+    }
   }
 }

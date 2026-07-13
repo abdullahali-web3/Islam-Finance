@@ -1,0 +1,22 @@
+# Maestro E2E smoke flow (ADR 0011). Launches the app on a dev-client build and asserts the
+# shell renders: the home header greeting and all four bottom tabs. This is the seam that gives
+# qa-functional-tester a real wizard->result flow to drive once calculators exist; for now it
+# proves the shell boots.
+#
+# appId must match the built app's package/bundle id (app.json android.package /
+# ios.bundleIdentifier). Those aren't set yet — update this value when EAS build profiles land.
+# Run with:  maestro test .maestro/smoke.yaml   (requires the Maestro CLI + a running device
+# with a dev-client build installed; Maestro is not an npm dependency.)
+appId: com.islamfinance.app
+---
+- launchApp
+- assertVisible: "Assalamu alaikum"
+- assertVisible: "Home"
+- assertVisible: "Learn"
+- assertVisible: "History"
+- assertVisible: "Settings"
+# Navigate the shell tabs to confirm routing works end-to-end.
+- tapOn: "Settings"
+- assertVisible: "Madhab"
+- tapOn: "Home"
+- assertVisible: "Assalamu alaikum"

@@ -4,6 +4,7 @@ const expoConfig = require('eslint-config-expo/flat');
 module.exports = [
   ...expoConfig,
   {
-    ignores: ['dist/*', 'node_modules/*', '.expo/*'],
+    // `proxy/` is an independently-deployed serverless function with its own toolchain (ADR 0008).
+    ignores: ['dist/*', 'node_modules/*', '.expo/*', 'proxy/*'],
   },
 ];
