@@ -6,15 +6,23 @@ else — agents working on a domain read only that domain's file here.
 
 ## Status lifecycle
 
-`draft` → `pending-review` → `approved`, with `revision-requested` as a loop-back from
-`pending-review` (scholar asks for changes) back to a revised `draft`/`pending-review` cycle.
+`draft` → `research-provisional` → `pending-review` → `approved`, with `revision-requested` as a
+loop-back (scholar asks for changes) back to a revised cycle.
 
-- **draft** — being researched/written. Not implementable.
-- **pending-review** — sent to the scholar via the `scholar-review-packet` skill. Not implementable.
-- **approved** — scholar has signed off. Only status at which `fiqh-to-code`, `learn-content-writer`,
-  and the `new-calculator` skill are allowed to act.
-- **revision-requested** — scholar asked for changes post-approval. `core/` and the Learn article are
-  NOT touched again until the doc is re-approved at a bumped version.
+> **Provisional-build policy (ADR 0013) — supersedes the older "only approved is implementable"
+> gate.** A doc that is fully researched + cited may be implemented at `research-provisional`. The
+> calculator then ships with a visible "not yet scholar-verified" disclaimer on every result; the
+> scholar reviews the OUTPUTS post-build, and `approved` drops the disclaimer. Every rule/constant
+> still traces to a cited source, and any choice still open is recorded as a documented default
+> (see e.g. zakat.md's "Implementation Defaults (provisional)" section) — nothing invented silently.
+
+- **draft** — being researched/written. Not yet implementable.
+- **research-provisional** — research complete + cited, open points pinned as documented defaults.
+  **Implementable now** under ADR 0013, ships with the disclaimer.
+- **pending-review** — bundled to the scholar via the `scholar-review-packet` skill.
+- **approved** — scholar has signed off on the outputs; the disclaimer is dropped.
+- **revision-requested** — scholar asked for changes. `core/` + Learn article are revised and the
+  doc re-cycled at a bumped version.
 
 ## Frontmatter (every doc)
 
@@ -77,7 +85,7 @@ Anything the drafting agent was unsure of — never silently resolved.
 
 | Domain | Status | Last updated | Scope |
 |---|---|---|---|
-| zakat | draft | — | Cash, gold/silver (incl. jewelry), business inventory |
+| zakat | research-provisional | 2026-07-13 | Cash, gold/silver (incl. jewelry), business inventory |
 | inheritance | — | — | Fara'id: fixed shares, 'Awl, Radd, named special cases |
 | fitrana | — | — | Zakat al-Fitr per-person amount |
 | qurbani | — | — | Udhiyah nisab eligibility check |

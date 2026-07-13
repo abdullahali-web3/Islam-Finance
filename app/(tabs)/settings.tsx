@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import i18next from '@/locales/i18n';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { SUPPORTED_CURRENCIES, type CurrencyCode } from '@/core/shared';
+import type { NisabBasis } from '@/core/zakat';
 import {
   useSettingsStore,
   type Madhab,
@@ -59,8 +60,18 @@ function SettingRow<T extends string>({
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
-  const { madhab, language, colorScheme, currency, setMadhab, setLanguage, setColorScheme, setCurrency } =
-    useSettingsStore();
+  const {
+    madhab,
+    language,
+    colorScheme,
+    currency,
+    nisabBasis,
+    setMadhab,
+    setLanguage,
+    setColorScheme,
+    setCurrency,
+    setNisabBasis,
+  } = useSettingsStore();
 
   const madhabOptions: { key: Madhab; label: string }[] = [
     { key: 'hanafi', label: t('settings.madhab.hanafi') },
@@ -84,6 +95,11 @@ export default function SettingsScreen() {
     key: c.code,
     label: `${c.code} ${c.symbol}`,
   }));
+
+  const nisabBasisOptions: { key: NisabBasis; label: string }[] = [
+    { key: 'silver', label: t('settings.nisabBasis.silver') },
+    { key: 'gold', label: t('settings.nisabBasis.gold') },
+  ];
 
   const handleLanguage = (next: Language) => {
     setLanguage(next);
@@ -114,6 +130,12 @@ export default function SettingsScreen() {
           value={currency}
           options={currencyOptions}
           onChange={setCurrency}
+        />
+        <SettingRow
+          label={t('settings.nisabBasis')}
+          value={nisabBasis}
+          options={nisabBasisOptions}
+          onChange={setNisabBasis}
         />
         <SettingRow
           label={t('settings.appearance')}

@@ -1,21 +1,35 @@
 ---
 domain: zakat
-status: draft
-version: 0.1
+status: research-provisional
+version: 0.2
 last_updated: 2026-07-13
 scholar_reviewer: unassigned
 madhab_dependent: true
 ---
 
+> **Provisional build (ADR 0013).** This doc is researched + cited but **not yet scholar-verified**.
+> Per the provisional-build policy it is implementable now; the Zakat calculator ships with a
+> visible "not yet scholar-verified" disclaimer on every result until a scholar reviews the OUTPUTS
+> and this status becomes `approved`. Every default below traces to a cited source in ## Sources —
+> nothing is invented silently. The **## Implementation Defaults (provisional)** section records the
+> exact choice the code makes for each item still flagged for the scholar.
+
 # Fiqh Rule Specification: Zakat
 
 ## Scope
-Covers Zakat on: cash/savings/bank balances, gold and silver (including personal-use jewelry),
-business/trade inventory (Zakat al-Tijarah), and Zakat al-Fitr (Fitrana amount only — the
-notification/reminder feature is out of scope for this doc). Zakat on stocks/shares, agricultural
-produce (Ushr), and livestock are deferred to a later doc/phase (Phase 3) given their niche
-applicability to this app's likely user base — noted here so `new-calculator` doesn't
-double-scaffold them under this domain.
+Covers Zakat on: cash/savings/bank balances, gold and silver (including personal-use jewelry), and
+business/trade inventory (Zakat al-Tijarah). **Zakat al-Fitr / Fitrana is a SEPARATE domain**
+(`fitrana`, per the fiqh README domain index) — not part of this wealth-Zakat calculator — because
+its "amount" is a per-person cash figure set by local fatwa councils, not a wealth calculation. Zakat
+on stocks/shares, agricultural produce (Ushr), and livestock are deferred to a later doc/phase
+(Phase 3) given their niche applicability to this app's likely user base — noted here so
+`new-calculator` doesn't double-scaffold them under this domain.
+
+**V1 calculator scope (this build):** single currency (the user's default from settings — mixed
+multi-currency holdings deferred); haul entered as a user-confirmed yes/no ("has a lunar year passed
+since your wealth reached nisab?") rather than date-tracked; 2.5% lunar-year rate (the 2.5772%
+Gregorian-year option is deferred); a single unobtrusive banner ad may appear on input/list surfaces
+but **never on the result screen** (CLAUDE.md).
 
 ## Definitions & Terminology
 - **Nisab**: the minimum threshold of wealth above which Zakat becomes obligatory.
@@ -135,7 +149,30 @@ market values — replace with the scholar-approved nisab constants once confirm
    year) — confirm whether V1 needs this at all, given it mainly matters for business users with
    real receivables ledgers rather than typical retail users.
 
+## Implementation Defaults (provisional)
+
+The concrete choice the V1 code makes for each item still flagged for the scholar. Each is a
+*documented default*, changeable once the scholar rules — not a silent invention. Traceable to
+## Sources / ## Flagged Uncertainties as noted.
+
+| # | Decision point | V1 default in code | Basis / trace | Overridable? |
+|---|---|---|---|---|
+| D1 | Gold nisab weight | **87.48 g** | AAOIFI / classical 20 mithqal (flag 1) | constant in `core/zakat/constants.ts` |
+| D2 | Silver nisab weight | **595 g** | AAOIFI-aligned (flag 2) | constant in `core/zakat/constants.ts` |
+| D3 | Nisab basis for cash/business | **silver** (the lower threshold) | NZF / Islamic Relief / MWL / Saudi Senior Scholars "lower of the two" (flag 2). Overrides each madhab's *classical* default (Hanafi silver, others gold) as a deliberate product choice per ADR 0009 | **user setting** `nisabBasis` (gold/silver), default silver |
+| D4 | Zakat rate | **2.5%** (lunar haul) | universal; hadith-based (Sources) | — |
+| D5 | Personal debt deduction | deduct only debt **due within the coming lunar year** from total zakatable wealth | contemporary practitioner convergence (flag 4) | — |
+| D6 | Personal-use jewelry (gold/silver) | **madhab-dependent** via RuleModule: Hanafi = zakatable; Shafi'i / Maliki / Hanbali = exempt for customary personal use | Madhab Divergence table (flags 3) | user picks madhab in settings |
+| D7 | Maliki "customary vs excess" jewelry test | treated as **exempt for personal use** (like Shafi'i/Hanbali); the qualitative "excess beyond customary" judgment is **disclaimed**, not encoded | flag 3 (inherently qualitative) | — |
+| D8 | Haul continuity model (endpoints vs continuous) | **recorded** in each RuleModule but **not exercised in V1** — V1 asks the user a yes/no "has a lunar year passed?"; no balance-over-time tracking, so the Hanafi-vs-others continuity split doesn't yet apply | Madhab Divergence table (haul) | future (date-tracking) |
+| D9 | Business receivables/"strong debt" madhab timing | **not split in V1** — receivables *currently due* are added, liabilities *currently due* subtracted, same for all madhabs; the retroactive/multi-year split is deferred | flag 5 (mainly matters for business ledgers) | future |
+
+Because of the disclaimer + these documented defaults, none of the flagged uncertainties block the
+V1 build; each is a knob the scholar review can turn, with the code already structured to turn it
+(constants file, `nisabBasis` setting, per-madhab RuleModule files).
+
 ## Changelog
 | Date | Version | Change | Requested by |
 |---|---|---|---|
 | 2026-07-13 | 0.1 | Initial draft from Phase 0 research session | user |
+| 2026-07-13 | 0.2 | status draft→research-provisional (ADR 0013); added Implementation Defaults (provisional) pinning D1–D9; scoped V1 (Fitrana separated out, single-currency, yes/no haul, 2.5% lunar); ready to build from | user |

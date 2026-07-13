@@ -34,7 +34,7 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     route: '/calculator/zakat',
     learnArticleId: 'zakat',
     phase: 1,
-    enabled: false,
+    enabled: true,
   },
   {
     id: 'inheritance',

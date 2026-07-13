@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 import { storage } from '@/services/storage';
 import type { CurrencyCode } from '@/core/shared';
+import type { NisabBasis } from '@/core/zakat';
 
 export type Madhab = 'hanafi' | 'shafii' | 'maliki' | 'hanbali';
 export type Language = 'en' | 'ur';
@@ -21,6 +22,8 @@ type SettingsState = {
   colorScheme: ColorSchemePreference;
   /** Default display currency, chosen at onboarding (ADR 0009). */
   currency: CurrencyCode;
+  /** Which metal threshold Zakat tests nisab against (ADR 0009; zakat.md D3). Default silver. */
+  nisabBasis: NisabBasis;
   /** Registry ids the user has favorited (ADR 0006). Order = insertion order. */
   favorites: string[];
   /** False until the first-run onboarding flow completes; gates the onboarding redirect. */
@@ -29,6 +32,7 @@ type SettingsState = {
   setLanguage: (language: Language) => void;
   setColorScheme: (colorScheme: ColorSchemePreference) => void;
   setCurrency: (currency: CurrencyCode) => void;
+  setNisabBasis: (nisabBasis: NisabBasis) => void;
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
   completeOnboarding: () => void;
@@ -41,12 +45,14 @@ export const useSettingsStore = create<SettingsState>()(
       language: 'en',
       colorScheme: 'system',
       currency: 'USD',
+      nisabBasis: 'silver',
       favorites: [],
       onboarded: false,
       setMadhab: (madhab) => set({ madhab }),
       setLanguage: (language) => set({ language }),
       setColorScheme: (colorScheme) => set({ colorScheme }),
       setCurrency: (currency) => set({ currency }),
+      setNisabBasis: (nisabBasis) => set({ nisabBasis }),
       toggleFavorite: (id) =>
         set((s) => ({
           favorites: s.favorites.includes(id)
@@ -65,6 +71,7 @@ export const useSettingsStore = create<SettingsState>()(
         language: s.language,
         colorScheme: s.colorScheme,
         currency: s.currency,
+        nisabBasis: s.nisabBasis,
         favorites: s.favorites,
         onboarded: s.onboarded,
       }),
