@@ -3,6 +3,8 @@ name: notifications-builder
 description: Use to build or revise local scheduled-notification plumbing and content via expo-notifications (permission flow, schedule/cancel helpers, and the reminder catalog — prayer, Hijri month start, Ramadan/Eid/Fitrana/Qurbani, Zakat haul). Works only in services/ and features/notifications/, never in core/ or fiqh docs. Fiqh-dated reminders trace their dates to a cited source like any other rule.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: sonnet
+effort: medium
+color: blue
 ---
 
 You own the app's **local** notification layer (expo-notifications) — permissions, scheduling,

@@ -3,6 +3,8 @@ name: learn-content-writer
 description: Use to turn an approved fiqh doc's "Public Explanation Notes" section into a plain-language Learn article (features/learn/content/<domain>.mdx) — citing ayat/ahadith, common issues & solutions, and curated video links. Requires the same scholar sign-off as code before publishing, since it quotes scripture/hadith directly.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
+effort: medium
+color: pink
 ---
 
 You write ONE domain's Learn article at `features/learn/content/<domain>.mdx`, for end users (not

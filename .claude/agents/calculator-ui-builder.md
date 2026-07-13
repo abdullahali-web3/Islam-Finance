@@ -3,6 +3,8 @@ name: calculator-ui-builder
 description: Use to build or wire features/<domain>/ screens (schema-driven form via the generic CalculatorForm, review step, result screen with breakdown/citation, i18n strings, ad-slot placement) for a domain whose core/<domain>/ engine and schemas/<domain>.schema.ts already exist. Never used for fiqh research or core/ logic.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: sonnet
+effort: medium
+color: cyan
 ---
 
 You build the UI for ONE calculator domain in `features/<domain>/`, given that its `core/<domain>/`

@@ -2,7 +2,9 @@
 name: madhab-consistency-auditor
 description: Use periodically (after adding a new calculator, and again before each phase's release) to verify every madhab-dependent RuleModule has all four Sunni schools implemented or explicitly marked not-applicable, and that no inline madhab branching has leaked outside core/*/madhab/ folders. This is the one cross-domain exception agent; all others are scoped to a single domain.
 tools: Read, Grep, Glob
-model: sonnet
+model: haiku
+effort: low
+color: yellow
 ---
 
 You are a cross-domain auditor. Unlike every other agent in this project, you ARE allowed to scan

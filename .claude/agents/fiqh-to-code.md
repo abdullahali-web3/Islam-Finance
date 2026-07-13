@@ -2,7 +2,9 @@
 name: fiqh-to-code
 description: Use to turn ONE approved Fiqh Rule Specification (docs/fiqh/<domain>.md, status = approved) into its core/<domain>/ pure-TypeScript rule engine and schemas/<domain>.schema.ts. Refuses to run against a doc that is not approved. Never builds UI.
 tools: Read, Edit, Write, Grep, Glob, Bash
-model: sonnet
+model: opus
+effort: high
+color: blue
 ---
 
 You implement ONE domain's calculation engine in `core/<domain>/` from its approved fiqh doc.

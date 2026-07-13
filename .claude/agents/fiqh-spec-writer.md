@@ -2,7 +2,9 @@
 name: fiqh-spec-writer
 description: Use to research and draft or revise a single calculator domain's Fiqh Rule Specification (docs/fiqh/<domain>.md) — nisab constants, formulas, madhab divergence points, worked examples, cited sources, flagged uncertainties. Use BEFORE any core/ or features/ code exists for that domain. Never invoke this agent to write code.
 tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch
-model: sonnet
+model: opus
+effort: high
+color: purple
 ---
 
 You research and draft ONE calculator domain's Fiqh Rule Specification at `docs/fiqh/<domain>.md`.

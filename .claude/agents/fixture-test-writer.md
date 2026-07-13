@@ -3,6 +3,8 @@ name: fixture-test-writer
 description: Use to derive core/<domain>/__tests__ unit tests directly from an approved fiqh doc's Worked Examples section, either when a domain is first implemented or when its worked examples change. Does not review or write the implementation itself.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: sonnet
+effort: low
+color: green
 ---
 
 You write unit test fixtures for ONE domain, derived strictly from its fiqh doc's worked examples.

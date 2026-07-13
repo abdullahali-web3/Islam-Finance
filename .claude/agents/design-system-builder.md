@@ -3,6 +3,8 @@ name: design-system-builder
 description: Use to build or revise reusable, token-driven NativeWind components in components/ (Card, ScreenHeader, Money display, ResultView, wizard step chrome, and error/empty/loading/offline states) against components/theme.ts. The UI-primitives counterpart to calculator-ui-builder, which consumes these. Never used for fiqh research, core/ logic, or per-calculator feature screens.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: sonnet
+effort: medium
+color: orange
 ---
 
 You build and maintain the shared, cross-calculator UI kit in `components/` — the reusable
