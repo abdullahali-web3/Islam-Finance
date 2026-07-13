@@ -29,7 +29,10 @@ on stocks/shares, agricultural produce (Ushr), and livestock are deferred to a l
 multi-currency holdings deferred); haul entered as a user-confirmed yes/no ("has a lunar year passed
 since your wealth reached nisab?") rather than date-tracked; 2.5% lunar-year rate (the 2.5772%
 Gregorian-year option is deferred); a single unobtrusive banner ad may appear on input/list surfaces
-but **never on the result screen** (CLAUDE.md).
+but **never on the result screen** (CLAUDE.md). The V1 input is a **single scrolling form** (generic
+`<CalculatorForm/>`, ADR 0001) rather than a multi-step wizard with a separate review step — the
+`WizardChrome`/review-step flow is deferred and revisited once real usage shows whether the field
+count warrants it.
 
 ## Definitions & Terminology
 - **Nisab**: the minimum threshold of wealth above which Zakat becomes obligatory.

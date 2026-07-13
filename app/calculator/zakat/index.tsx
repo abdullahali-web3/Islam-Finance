@@ -4,12 +4,16 @@ import { Stack, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { ScreenHeader } from '@/components/ScreenHeader';
-import { OfflineNotice } from '@/components/OfflineNotice';
 import { CalculatorForm } from '@/components/CalculatorForm';
 import { calculateZakat, getRuleModule } from '@/core/zakat';
-import { makeZakatSchema, zakatDefaultValues, type ZakatFormValues } from '@/schemas/zakat.schema';
+import {
+  makeZakatSchema,
+  zakatDefaultValues,
+  type ZakatFormValues,
+} from '@/schemas/zakat.schema';
 import { buildZakatFields } from '@/features/zakat/fields';
 import { toZakatInput } from '@/features/zakat/toZakatInput';
+import { getManualOverride, setManualOverride } from '@/services/priceProxy';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useZakatStore } from '@/store/zakatStore';
 
@@ -17,7 +21,8 @@ import { useZakatStore } from '@/store/zakatStore';
  * Zakat input screen (ADR 0006 route: /calculator/zakat). Renders the generic <CalculatorForm/> from
  * the Zakat schema (ADR 0001), computes with the engine using the user's madhab + nisab basis, stores
  * the result, and routes to the result screen. Not scholar-verified yet — the result screen carries
- * the provisional disclaimer (ADR 0013).
+ * the provisional disclaimer (ADR 0013). Metal prices the user types are cached locally (MMKV, no
+ * network — ADR 0008 manual override) and prefilled next time.
  */
 export default function ZakatInputScreen() {
   const { t } = useTranslation();
@@ -28,12 +33,47 @@ export default function ZakatInputScreen() {
   const nisabBasis = useSettingsStore((s) => s.nisabBasis);
   const setLast = useZakatStore((s) => s.setLast);
 
-  const schema = useMemo(() => makeZakatSchema(nisabBasis), [nisabBasis]);
+  const schema = useMemo(
+    () =>
+      makeZakatSchema(nisabBasis, {
+        amount: t('zakat.err.amount'),
+        nonnegative: t('zakat.err.nonnegative'),
+        goldPrice: t('zakat.err.goldPrice'),
+        silverPrice: t('zakat.err.silverPrice'),
+      }),
+    [nisabBasis, t]
+  );
+
   const fields = useMemo(() => buildZakatFields(t), [t]);
+
+  // Prefill the metal prices from the locally-cached manual override (same currency only), so the
+  // user doesn't retype today's prices on every calculation. Local read only — never a network call.
+  const defaultValues = useMemo<ZakatFormValues>(() => {
+    const override = getManualOverride();
+    if (override && override.currency === currency) {
+      return {
+        ...zakatDefaultValues,
+        goldPricePerGram: override.goldPerGram,
+        silverPricePerGram: override.silverPerGram,
+      };
+    }
+    return zakatDefaultValues;
+  }, [currency]);
 
   const onSubmit = (values: ZakatFormValues) => {
     const input = toZakatInput(values, { currency, nisabBasis });
     const result = calculateZakat(input, getRuleModule(madhab));
+
+    // Persist the entered prices locally for next time (no network; ADR 0008 manual override).
+    if (values.goldPricePerGram > 0 && values.silverPricePerGram > 0) {
+      setManualOverride({
+        goldPerGram: values.goldPricePerGram,
+        silverPerGram: values.silverPricePerGram,
+        currency,
+        asOf: new Date().toISOString(),
+      });
+    }
+
     setLast({ input, result, madhab });
     router.push('/calculator/zakat/result');
   };
@@ -47,8 +87,11 @@ export default function ZakatInputScreen() {
           subtitle={t('zakat.inputSubtitle', { currency })}
         />
 
-        <View className="mb-4">
-          <OfflineNotice message={t('zakat.priceHint')} />
+        {/* Instructional hint (not an offline/alert state — a plain info note). */}
+        <View className="mb-4 rounded-md bg-neutral-100 px-3 py-2.5 dark:bg-neutral-700">
+          <Text className="text-xs leading-5 text-neutral-700 dark:text-neutral-100">
+            {t('zakat.priceHint')}
+          </Text>
         </View>
 
         <Text className="mb-5 text-xs text-neutral-500 dark:text-neutral-300">
@@ -61,7 +104,7 @@ export default function ZakatInputScreen() {
         <CalculatorForm
           schema={schema}
           fields={fields}
-          defaultValues={zakatDefaultValues}
+          defaultValues={defaultValues}
           submitLabel={t('zakat.calculate')}
           onSubmit={onSubmit}
         />

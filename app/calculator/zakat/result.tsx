@@ -32,6 +32,7 @@ export default function ZakatResultScreen() {
     locale: i18n.language,
     madhab: last.madhab,
     nisabBasis: last.input.nisabBasis,
+    input: last.input,
   });
 
   const actions: ResultAction[] = [
@@ -39,8 +40,13 @@ export default function ZakatResultScreen() {
       label: t('common.share'),
       icon: 'share-outline',
       onPress: () => {
+        // i18n template (no in-code concatenation) so word order/structure is translatable (ADR 0009).
         Share.share({
-          message: `${view.headlineLabel}: ${view.headline}\n\n${view.disclaimer}`,
+          message: t('zakat.result.shareMessage', {
+            label: view.headlineLabel,
+            amount: view.headline,
+            disclaimer: view.disclaimer,
+          }),
         });
       },
     },
