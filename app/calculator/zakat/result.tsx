@@ -5,20 +5,36 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { ResultView, type ResultAction } from '@/components/ResultView';
 import { buildZakatResultView } from '@/features/zakat/toResultView';
+import { useHistoryAction } from '@/features/history/useHistoryAction';
 import { useZakatStore } from '@/store/zakatStore';
 
 /**
- * Zakat result screen (ADR 0006 route: /calculator/zakat/result). Reads the last computation from the
- * transient store and renders it through the shared ResultView (breakdown + cited source + provisional
- * disclaimer + actions). No ad on this screen (CLAUDE.md). If reached without a computation (e.g. deep
- * link), it shows an empty state prompting the user to run the calculator.
+ * Zakat result screen (ADR 0006 route: /calculator/zakat/result). Shared ResultView (breakdown +
+ * cited source + provisional disclaimer + save/share). No ad on this screen (CLAUDE.md).
  */
 export default function ZakatResultScreen() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const last = useZakatStore((s) => s.last);
 
-  if (!last) {
+  const view = last
+    ? buildZakatResultView(last.result, {
+        t,
+        locale: i18n.language,
+        madhab: last.madhab,
+        nisabBasis: last.input.nisabBasis,
+        input: last.input,
+      })
+    : null;
+
+  const saveAction = useHistoryAction({
+    domain: 'zakat',
+    titleKey: 'home.card.zakat',
+    headline: view?.headline ?? '',
+    subtitle: view?.headlineLabel,
+  });
+
+  if (!last || !view) {
     return (
       <ScreenContainer>
         <Stack.Screen options={{ headerShown: true, title: t('home.card.zakat') }} />
@@ -27,20 +43,12 @@ export default function ZakatResultScreen() {
     );
   }
 
-  const view = buildZakatResultView(last.result, {
-    t,
-    locale: i18n.language,
-    madhab: last.madhab,
-    nisabBasis: last.input.nisabBasis,
-    input: last.input,
-  });
-
   const actions: ResultAction[] = [
+    saveAction,
     {
       label: t('common.share'),
       icon: 'share-outline',
       onPress: () => {
-        // i18n template (no in-code concatenation) so word order/structure is translatable (ADR 0009).
         Share.share({
           message: t('zakat.result.shareMessage', {
             label: view.headlineLabel,
@@ -50,11 +58,7 @@ export default function ZakatResultScreen() {
         });
       },
     },
-    {
-      label: t('zakat.result.recalculate'),
-      icon: 'refresh-outline',
-      onPress: () => router.back(),
-    },
+    { label: t('zakat.result.recalculate'), icon: 'refresh-outline', onPress: () => router.back() },
   ];
 
   return (

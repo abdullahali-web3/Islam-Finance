@@ -5,6 +5,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { ResultView, type ResultAction } from '@/components/ResultView';
 import { buildFidyaResultView } from '@/features/fidya/fidyaUi';
+import { useHistoryAction } from '@/features/history/useHistoryAction';
 import { useFidyaStore } from '@/store/fidyaStore';
 
 /** Fidya & Kaffarah result screen (ADR 0006 route: /calculator/fidya/result). */
@@ -13,7 +14,15 @@ export default function FidyaResultScreen() {
   const router = useRouter();
   const last = useFidyaStore((s) => s.last);
 
-  if (!last) {
+  const view = last ? buildFidyaResultView(last, { t, locale: i18n.language }) : null;
+  const saveAction = useHistoryAction({
+    domain: 'fidya',
+    titleKey: 'home.card.fidya',
+    headline: view?.headline ?? '',
+    subtitle: view?.headlineLabel,
+  });
+
+  if (!last || !view) {
     return (
       <ScreenContainer>
         <Stack.Screen options={{ headerShown: true, title: t('home.card.fidya') }} />
@@ -22,8 +31,8 @@ export default function FidyaResultScreen() {
     );
   }
 
-  const view = buildFidyaResultView(last, { t, locale: i18n.language });
   const actions: ResultAction[] = [
+    saveAction,
     {
       label: t('common.share'),
       icon: 'share-outline',

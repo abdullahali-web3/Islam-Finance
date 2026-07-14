@@ -5,6 +5,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { ResultView, type ResultAction } from '@/components/ResultView';
 import { buildQurbaniResultView } from '@/features/qurbani/qurbaniUi';
+import { useHistoryAction } from '@/features/history/useHistoryAction';
 import { useQurbaniStore } from '@/store/qurbaniStore';
 
 /** Qurbani result screen (ADR 0006 route: /calculator/qurbani/result). */
@@ -13,7 +14,15 @@ export default function QurbaniResultScreen() {
   const router = useRouter();
   const last = useQurbaniStore((s) => s.last);
 
-  if (!last) {
+  const view = last ? buildQurbaniResultView(last, { t, locale: i18n.language }) : null;
+  const saveAction = useHistoryAction({
+    domain: 'qurbani',
+    titleKey: 'home.card.qurbani',
+    headline: view?.headline ?? '',
+    subtitle: view?.headlineLabel,
+  });
+
+  if (!last || !view) {
     return (
       <ScreenContainer>
         <Stack.Screen options={{ headerShown: true, title: t('home.card.qurbani') }} />
@@ -22,8 +31,8 @@ export default function QurbaniResultScreen() {
     );
   }
 
-  const view = buildQurbaniResultView(last, { t, locale: i18n.language });
   const actions: ResultAction[] = [
+    saveAction,
     {
       label: t('common.share'),
       icon: 'share-outline',

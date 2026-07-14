@@ -5,6 +5,7 @@ import { ScreenContainer } from '@/components/ScreenContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { ResultView, type ResultAction } from '@/components/ResultView';
 import { buildFitranaResultView } from '@/features/fitrana/fitranaUi';
+import { useHistoryAction } from '@/features/history/useHistoryAction';
 import { useFitranaStore } from '@/store/fitranaStore';
 
 /** Fitrana result screen (ADR 0006 route: /calculator/fitrana/result). */
@@ -13,7 +14,15 @@ export default function FitranaResultScreen() {
   const router = useRouter();
   const last = useFitranaStore((s) => s.last);
 
-  if (!last) {
+  const view = last ? buildFitranaResultView(last, { t, locale: i18n.language }) : null;
+  const saveAction = useHistoryAction({
+    domain: 'fitrana',
+    titleKey: 'home.card.fitrana',
+    headline: view?.headline ?? '',
+    subtitle: view?.headlineLabel,
+  });
+
+  if (!last || !view) {
     return (
       <ScreenContainer>
         <Stack.Screen options={{ headerShown: true, title: t('home.card.fitrana') }} />
@@ -22,8 +31,8 @@ export default function FitranaResultScreen() {
     );
   }
 
-  const view = buildFitranaResultView(last, { t, locale: i18n.language });
   const actions: ResultAction[] = [
+    saveAction,
     {
       label: t('common.share'),
       icon: 'share-outline',
