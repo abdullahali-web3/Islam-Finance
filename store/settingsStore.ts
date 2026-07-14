@@ -24,6 +24,8 @@ type SettingsState = {
   currency: CurrencyCode;
   /** Which metal threshold Zakat tests nisab against (ADR 0009; zakat.md D3). Default silver. */
   nisabBasis: NisabBasis;
+  /** Manual Hijri day adjustment (−2..+2) to align the algorithmic calendar with local sighting. */
+  hijriAdjust: number;
   /** Registry ids the user has favorited (ADR 0006). Order = insertion order. */
   favorites: string[];
   /** False until the first-run onboarding flow completes; gates the onboarding redirect. */
@@ -33,6 +35,7 @@ type SettingsState = {
   setColorScheme: (colorScheme: ColorSchemePreference) => void;
   setCurrency: (currency: CurrencyCode) => void;
   setNisabBasis: (nisabBasis: NisabBasis) => void;
+  setHijriAdjust: (hijriAdjust: number) => void;
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
   completeOnboarding: () => void;
@@ -46,6 +49,7 @@ export const useSettingsStore = create<SettingsState>()(
       colorScheme: 'system',
       currency: 'USD',
       nisabBasis: 'silver',
+      hijriAdjust: 0,
       favorites: [],
       onboarded: false,
       setMadhab: (madhab) => set({ madhab }),
@@ -53,6 +57,7 @@ export const useSettingsStore = create<SettingsState>()(
       setColorScheme: (colorScheme) => set({ colorScheme }),
       setCurrency: (currency) => set({ currency }),
       setNisabBasis: (nisabBasis) => set({ nisabBasis }),
+      setHijriAdjust: (hijriAdjust) => set({ hijriAdjust }),
       toggleFavorite: (id) =>
         set((s) => ({
           favorites: s.favorites.includes(id)
@@ -72,6 +77,7 @@ export const useSettingsStore = create<SettingsState>()(
         colorScheme: s.colorScheme,
         currency: s.currency,
         nisabBasis: s.nisabBasis,
+        hijriAdjust: s.hijriAdjust,
         favorites: s.favorites,
         onboarded: s.onboarded,
       }),

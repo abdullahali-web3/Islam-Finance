@@ -81,6 +81,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     phase: 1,
     enabled: false,
   },
+  {
+    id: 'hijri',
+    titleKey: 'home.card.hijri',
+    icon: 'calendar-outline',
+    route: '/calculator/hijri',
+    learnArticleId: null,
+    phase: 1,
+    enabled: true,
+  },
 ];
 
 export function getCalculator(id: string): CalculatorDescriptor | undefined {
