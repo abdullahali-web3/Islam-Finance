@@ -46,6 +46,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     enabled: true,
   },
   {
+    id: 'fitrana',
+    titleKey: 'home.card.fitrana',
+    icon: 'gift-outline',
+    route: '/calculator/fitrana',
+    learnArticleId: 'fitrana',
+    phase: 1,
+    enabled: true,
+  },
+  {
     id: 'prayer-times',
     titleKey: 'home.card.prayerTimes',
     icon: 'time-outline',
