@@ -90,6 +90,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     phase: 1,
     enabled: true,
   },
+  {
+    id: 'tasbih',
+    titleKey: 'home.card.tasbih',
+    icon: 'ellipse-outline',
+    route: '/calculator/tasbih',
+    learnArticleId: null,
+    phase: 1,
+    enabled: true,
+  },
 ];
 
 export function getCalculator(id: string): CalculatorDescriptor | undefined {

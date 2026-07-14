@@ -290,5 +290,11 @@
   "prayer.methodName.Singapore": "سنگاپور",
   "prayer.methodName.Turkey": "ترکی",
   "prayer.methodName.Tehran": "تہران",
-  "prayer.methodName.MoonsightingCommittee": "مونسائٹنگ کمیٹی"
+  "prayer.methodName.MoonsightingCommittee": "مونسائٹنگ کمیٹی",
+  "home.card.tasbih": "تسبیح",
+  "tasbih.subtitle": "ڈیجیٹل ذکر کاؤنٹر",
+  "tasbih.tapToCount": "گننے کے لیے ٹیپ کریں",
+  "tasbih.total": "کل: {{count}}",
+  "tasbih.cycles": "چکر: {{cycles}}",
+  "tasbih.reset": "دوبارہ ترتیب دیں"
 }

@@ -290,5 +290,11 @@
   "prayer.methodName.Singapore": "Singapore",
   "prayer.methodName.Turkey": "Turkey",
   "prayer.methodName.Tehran": "Tehran",
-  "prayer.methodName.MoonsightingCommittee": "Moonsighting Committee"
+  "prayer.methodName.MoonsightingCommittee": "Moonsighting Committee",
+  "home.card.tasbih": "Tasbih",
+  "tasbih.subtitle": "Digital dhikr counter",
+  "tasbih.tapToCount": "Tap to count",
+  "tasbih.total": "Total: {{count}}",
+  "tasbih.cycles": "Cycles: {{cycles}}",
+  "tasbih.reset": "Reset"
 }
