@@ -53,10 +53,6 @@ export function isZero(a: Fraction): boolean {
   return a.n === 0;
 }
 
-export function toNumber(a: Fraction): number {
-  return a.n / a.d;
-}
-
 export function sumF(fractions: readonly Fraction[]): Fraction {
   return fractions.reduce((acc, f) => addF(acc, f), ZERO);
 }

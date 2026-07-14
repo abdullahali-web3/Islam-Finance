@@ -65,11 +65,6 @@ export function hijriToGregorian(date: CalDate, adjustDays = 0): CalDate {
   return jdnToGregorian(hijriToJDN(date) - adjustDays);
 }
 
-/** Days in a Hijri month (for validation/UI). */
-export function hijriMonthLength(y: number, m: number): number {
-  return hijriToJDN({ y, m: m === 12 ? 12 : m + 1, d: m === 12 ? 30 : 1 }) - hijriToJDN({ y, m, d: 1 }) || 29;
-}
-
 /** Fixed Hijri (month, day) of the key Islamic events. Keys map to i18n in the UI. */
 export const ISLAMIC_EVENTS: { key: string; m: number; d: number }[] = [
   { key: 'newYear', m: 1, d: 1 },

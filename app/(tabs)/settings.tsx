@@ -145,14 +145,9 @@ export default function SettingsScreen() {
         />
 
         {__DEV__ ? (
-          <View className="mt-4 gap-2">
-            <Link href="/dev/calculator-form-demo" className="text-sm font-medium text-green-500">
-              Dev: Form demo
-            </Link>
-            <Link href="/dev/design-system" className="text-sm font-medium text-green-500">
-              Dev: Design system
-            </Link>
-          </View>
+          <Link href="/dev/design-system" className="mt-4 text-sm font-medium text-green-500">
+            Dev: Design system
+          </Link>
         ) : null}
       </ScrollView>
     </ScreenContainer>

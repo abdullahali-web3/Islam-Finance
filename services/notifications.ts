@@ -74,14 +74,6 @@ export async function scheduleDateReminder(
   });
 }
 
-export async function cancelReminder(id: ReminderId): Promise<void> {
-  await Notifications.cancelScheduledNotificationAsync(id);
-}
-
 export async function cancelAllReminders(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
-}
-
-export async function getScheduledReminders(): Promise<Notifications.NotificationRequest[]> {
-  return Notifications.getAllScheduledNotificationsAsync();
 }
