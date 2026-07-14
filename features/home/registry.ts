@@ -64,6 +64,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     enabled: true,
   },
   {
+    id: 'fidya',
+    titleKey: 'home.card.fidya',
+    icon: 'restaurant-outline',
+    route: '/calculator/fidya',
+    learnArticleId: 'fidya',
+    phase: 1,
+    enabled: true,
+  },
+  {
     id: 'prayer-times',
     titleKey: 'home.card.prayerTimes',
     icon: 'time-outline',
