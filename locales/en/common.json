@@ -303,5 +303,16 @@
   "tasbih.tapToCount": "Tap to count",
   "tasbih.total": "Total: {{count}}",
   "tasbih.cycles": "Cycles: {{cycles}}",
-  "tasbih.reset": "Reset"
+  "tasbih.reset": "Reset",
+  "home.card.reminders": "Reminders",
+  "reminders.subtitle": "Prayer & Islamic date notifications",
+  "reminders.prayer": "Prayer time reminders",
+  "reminders.prayerDesc": "A daily notification at each prayer time.",
+  "reminders.events": "Islamic date reminders",
+  "reminders.eventsDesc": "A heads-up for Ramadan, the Eids, and other key dates.",
+  "reminders.needLocation": "Set your location in Prayer Times first.",
+  "reminders.note": "Reminders use on-device scheduled notifications (no internet). Prayer times are based on your last location and may drift over the year — reopen this screen to refresh.",
+  "reminders.denied": "Notifications are turned off. Enable them in your device settings, then try again.",
+  "reminders.prayerBody": "It's time for {{name}}.",
+  "reminders.eventBody": "{{name}} is approaching."
 }

@@ -31,6 +31,10 @@ type SettingsState = {
   prayerMethod: PrayerMethodKey;
   /** Last known location (cached so prayer times/qibla work offline after the first GPS fix). */
   location: { lat: number; lng: number } | null;
+  /** Daily prayer-time reminders enabled. */
+  remindersPrayer: boolean;
+  /** Islamic-date reminders (Ramadan, Eids…) enabled. */
+  remindersEvents: boolean;
   /** Registry ids the user has favorited (ADR 0006). Order = insertion order. */
   favorites: string[];
   /** False until the first-run onboarding flow completes; gates the onboarding redirect. */
@@ -43,6 +47,8 @@ type SettingsState = {
   setHijriAdjust: (hijriAdjust: number) => void;
   setPrayerMethod: (prayerMethod: PrayerMethodKey) => void;
   setLocation: (location: { lat: number; lng: number } | null) => void;
+  setRemindersPrayer: (on: boolean) => void;
+  setRemindersEvents: (on: boolean) => void;
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
   completeOnboarding: () => void;
@@ -59,6 +65,8 @@ export const useSettingsStore = create<SettingsState>()(
       hijriAdjust: 0,
       prayerMethod: 'MuslimWorldLeague',
       location: null,
+      remindersPrayer: false,
+      remindersEvents: false,
       favorites: [],
       onboarded: false,
       setMadhab: (madhab) => set({ madhab }),
@@ -69,6 +77,8 @@ export const useSettingsStore = create<SettingsState>()(
       setHijriAdjust: (hijriAdjust) => set({ hijriAdjust }),
       setPrayerMethod: (prayerMethod) => set({ prayerMethod }),
       setLocation: (location) => set({ location }),
+      setRemindersPrayer: (on) => set({ remindersPrayer: on }),
+      setRemindersEvents: (on) => set({ remindersEvents: on }),
       toggleFavorite: (id) =>
         set((s) => ({
           favorites: s.favorites.includes(id)
@@ -91,6 +101,8 @@ export const useSettingsStore = create<SettingsState>()(
         hijriAdjust: s.hijriAdjust,
         prayerMethod: s.prayerMethod,
         location: s.location,
+        remindersPrayer: s.remindersPrayer,
+        remindersEvents: s.remindersEvents,
         favorites: s.favorites,
         onboarded: s.onboarded,
       }),

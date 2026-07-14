@@ -99,6 +99,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     phase: 1,
     enabled: true,
   },
+  {
+    id: 'reminders',
+    titleKey: 'home.card.reminders',
+    icon: 'notifications-outline',
+    route: '/calculator/reminders',
+    learnArticleId: null,
+    phase: 1,
+    enabled: true,
+  },
 ];
 
 export function getCalculator(id: string): CalculatorDescriptor | undefined {
