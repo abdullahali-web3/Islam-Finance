@@ -1,7 +1,9 @@
-import type { AsrMadhab, PrayerMethodKey } from '@/core/prayer';
+import { PRAYER_METHODS, type AsrMadhab, type PrayerMethodKey } from '@/core/prayer';
 import type { Madhab } from '@/store/settingsStore';
 
-export const PRAYER_METHOD_KEYS: PrayerMethodKey[] = [
+// Preferred display order. Derived from core's PRAYER_METHODS so a method added to core can never be
+// silently dropped from the picker — any not listed here are appended.
+const PREFERRED_ORDER: PrayerMethodKey[] = [
   'MuslimWorldLeague',
   'NorthAmerica',
   'Karachi',
@@ -15,8 +17,17 @@ export const PRAYER_METHOD_KEYS: PrayerMethodKey[] = [
   'Tehran',
   'MoonsightingCommittee',
 ];
+export const PRAYER_METHOD_KEYS: PrayerMethodKey[] = [
+  ...PREFERRED_ORDER.filter((m) => PRAYER_METHODS.includes(m)),
+  ...PRAYER_METHODS.filter((m) => !PREFERRED_ORDER.includes(m)),
+];
 
-/** Asr timing follows the user's madhab (Hanafi = later Asr). */
+/**
+ * Map the user's madhab to the Asr-timing convention (Hanafi = later Asr; the other three use the
+ * standard/earlier time). This is an intentional, isolated 4→2 mapping for the `adhan` astronomy
+ * library, NOT a fiqh ruling — prayer times aren't a fiqh-doc domain and have no RuleModule, so the
+ * CLAUDE.md "no inline madhab branching" rule (which governs the fiqh calculators) doesn't apply here.
+ */
 export function asrMadhabForMadhab(madhab: Madhab): AsrMadhab {
   return madhab === 'hanafi' ? 'hanafi' : 'shafi';
 }

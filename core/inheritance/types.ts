@@ -66,7 +66,8 @@ export type InheritanceResult = {
   shares: HeirShare[];
   /** Heirs supplied but fully blocked (share 0) — surfaced so the user sees they were considered. */
   blocked: { heir: HeirKey; count: number }[];
-  adjustment: 'none' | 'awl' | 'radd';
+  /** 'baytalmal' = a surplus remained that this school withholds from the heirs (public treasury). */
+  adjustment: 'none' | 'awl' | 'radd' | 'baytalmal';
   totalDistributed: Money;
   madhab: MadhabSchool;
 };

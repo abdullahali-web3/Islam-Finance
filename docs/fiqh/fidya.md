@@ -72,7 +72,7 @@ amount per person as input, so this doesn't branch in code. Stated explicitly so
 ## Implementation Defaults (provisional)
 | # | Decision | V1 default | Where |
 |---|---|---|---|
-| D1 | Kaffarah multiplier | **60** per broken day | `core/fidya/constants.ts` |
+| D1 | Kaffarah multiplier | **60** per broken day | `core/fidya/index.ts` (`KAFFARAH_PEOPLE_PER_DAY`) |
 | D2 | Fidya | 1 person per missed fast | engine |
 | D3 | Per-day amount | user-provided (local figure) | UI |
 

@@ -143,6 +143,7 @@
   "inheritance.result.citation": "{{madhab}} مسلک کے مطابق فرائض کے مقررہ حصوں سے تقسیم۔ ماخذ: docs/fiqh/inheritance.md۔",
   "inheritance.result.awlNote": "حصے ترکہ سے زیادہ ہو گئے، اس لیے سب کو متناسب طور پر کم کیا گیا (عول)۔",
   "inheritance.result.raddNote": "کوئی عصبہ نہ ہونے کی وجہ سے بچی ہوئی رقم اصحاب الفروض کو واپس کر دی گئی (رد)۔",
+  "inheritance.result.baytAlMalNote": "بچی ہوئی رقم اس مسلک کے مطابق ورثاء کو واپس نہیں کی جاتی — کلاسیکی طور پر یہ بیت المال میں جاتی ہے، اس لیے نیچے دیے گئے حصے ترکہ سے کم ہیں۔",
   "inheritance.result.blockedNote": "محروم (قریب تر وارث کی وجہ سے): {{heirs}}۔",
   "inheritance.result.disclaimer": "یہ نتائج ابھی علماء سے تصدیق شدہ نہیں اور عارضی ہیں۔ وراثت شرعی و قانونی طور پر اہم ہے — عمل سے پہلے کسی مستند عالم (اور درست وصیت کے لیے وکیل) سے تصدیق کریں۔",
   "inheritance.result.shareMessage": "{{estate}}\n\n{{lines}}\n\n{{disclaimer}}",

@@ -1,5 +1,5 @@
 // Pure metal-price types + parsing (ADR 0008). No expo/MMKV/fetch here, so parsing and staleness
-// are unit-testable in plain Jest. services/priceProxy.ts wraps this with fetch + MMKV caching.
+// are unit-testable in plain Jest. services/priceProxy.ts wraps this with MMKV-backed storage.
 import type { CurrencyCode } from '@/core/shared';
 
 /** Gold/silver spot price for nisab, per gram, in a given currency, timestamped. */
@@ -10,9 +10,6 @@ export type MetalPrices = {
   /** ISO 8601 timestamp of when the provider priced these. */
   asOf: string;
 };
-
-/** Where a resolved price came from — surfaced in the UI (e.g. "offline, cached price"). */
-export type PriceSource = 'live' | 'cache' | 'override';
 
 /**
  * Validate + normalize a raw proxy/cache/override payload into MetalPrices, or null if it's not a

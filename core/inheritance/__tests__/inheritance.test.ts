@@ -199,3 +199,27 @@ describe('distributeInheritance — invariants & guards', () => {
     ).toThrow(UnsupportedInheritanceCase);
   });
 });
+
+describe('distributeInheritance — Radd RuleModule flags are honored (not decorative)', () => {
+  it('raddToSpouseWhenSole=false: a sole spouse keeps only their fixed share, surplus → Bayt al-Mal', () => {
+    const rule = { ...getRuleModule('shafii'), raddToSpouseWhenSole: false };
+    const r = distributeInheritance(base({ estate: 50000, wives: 1 }), rule);
+    expect(amt(r, 'wife')).toBe(12500); // ¼ only, not the whole estate
+    expect(r.adjustment).toBe('baytalmal');
+    expect(r.totalDistributed.amount).toBe(12500);
+  });
+
+  it('appliesRadd=false: surplus is withheld from the heirs (Bayt al-Mal), not returned', () => {
+    const rule = { ...getRuleModule('shafii'), appliesRadd: false };
+    // 2 daughters (⅔) + mother (⅙) = ⅚ < 1, no residuary.
+    const r = distributeInheritance(base({ estate: 90000, daughters: 2, mother: true }), rule);
+    expect(amt(r, 'daughter')).toBe(60000); // ⅔, not radd-inflated ⅘
+    expect(amt(r, 'mother')).toBe(15000); // ⅙
+    expect(r.adjustment).toBe('baytalmal');
+  });
+
+  it('defaults (all flags true) still return the surplus (Radd), unchanged', () => {
+    const r = distributeInheritance(base({ estate: 50000, wives: 1 }), getRuleModule('hanafi'));
+    expect(amt(r, 'wife')).toBe(50000);
+  });
+});

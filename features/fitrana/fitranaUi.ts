@@ -1,11 +1,9 @@
 import type { TFunction } from 'i18next';
 import { formatMoney, type CurrencyCode } from '@/core/shared';
-import type { FitranaInput, FitranaResult } from '@/core/fitrana';
+import { STAPLES, type FitranaInput, type FitranaResult } from '@/core/fitrana';
 import type { FieldConfig } from '@/components/CalculatorForm';
 import type { BreakdownRow } from '@/components/ResultView';
 import type { FitranaFormValues } from '@/schemas/fitrana.schema';
-
-const STAPLE_KEYS = ['dates', 'barley', 'raisins', 'wheat', 'rice'] as const;
 
 export function buildFitranaFields(t: TFunction): FieldConfig<FitranaFormValues>[] {
   return [
@@ -24,7 +22,7 @@ export function buildFitranaFields(t: TFunction): FieldConfig<FitranaFormValues>
       name: 'staple',
       label: t('fitrana.field.staple'),
       type: 'select',
-      options: STAPLE_KEYS.map((s) => ({ value: s, label: t(`fitrana.staple.${s}`) })),
+      options: STAPLES.map((s) => ({ value: s, label: t(`fitrana.staple.${s}`) })),
     },
     { name: 'pricePerKg', label: t('fitrana.field.pricePerKg'), type: 'number', placeholder: '0' },
   ];

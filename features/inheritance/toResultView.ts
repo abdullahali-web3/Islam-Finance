@@ -43,6 +43,7 @@ export function buildInheritanceResultView(
   ];
   if (result.adjustment === 'awl') citationParts.push(t('inheritance.result.awlNote'));
   if (result.adjustment === 'radd') citationParts.push(t('inheritance.result.raddNote'));
+  if (result.adjustment === 'baytalmal') citationParts.push(t('inheritance.result.baytAlMalNote'));
   if (result.blocked.length > 0) {
     const names = result.blocked.map((b) => heirLabel(t, b.heir, b.count)).join(', ');
     citationParts.push(t('inheritance.result.blockedNote', { heirs: names }));

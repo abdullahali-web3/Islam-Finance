@@ -306,7 +306,7 @@ export function distributeInheritance(
 
   // ---------- assemble shares ----------
   let finalShares: FixedAssign[];
-  let adjustment: 'none' | 'awl' | 'radd' = 'none';
+  let adjustment: 'none' | 'awl' | 'radd' | 'baytalmal' = 'none';
 
   if (muqasamaResult) {
     finalShares = muqasamaResult;
@@ -334,16 +334,24 @@ export function distributeInheritance(
         finalShares = applyAwl(fixed, sumFixed);
       }
     } else {
-      // No residuary → ʿAwl or Radd.
+      // No residuary → ʿAwl, Radd, or surplus withheld to Bayt al-Māl (per the RuleModule, D1/D2).
       const c = cmpF(sumFixed, ONE);
       if (c > 0) {
         adjustment = 'awl';
         finalShares = applyAwl(fixed, sumFixed);
-      } else if (c < 0 && rule.appliesRadd) {
-        adjustment = 'radd';
-        finalShares = applyRadd(fixed, spouseFraction, husband || wives > 0, rule);
+      } else if (c < 0) {
+        const onlySpouseFixed = fixed.every((f) => f.heir === 'husband' || f.heir === 'wife');
+        // Surplus is withheld (→ Bayt al-Māl) when this school doesn't apply Radd, or when the sole
+        // fixed heir is a spouse and Radd-to-spouse is off. Otherwise the surplus is returned (Radd).
+        if (!rule.appliesRadd || (onlySpouseFixed && !rule.raddToSpouseWhenSole)) {
+          adjustment = 'baytalmal';
+          finalShares = fixed; // fixed shares stand; the remainder is not distributed to heirs
+        } else {
+          adjustment = 'radd';
+          finalShares = applyRadd(fixed, spouseFraction, husband || wives > 0);
+        }
       } else {
-        finalShares = fixed; // exactly 1, or radd disabled (surplus → Bayt al-Māl, not distributed)
+        finalShares = fixed; // shares sum to exactly the estate
       }
     }
 
@@ -395,14 +403,13 @@ function applyAwl(fixed: FixedAssign[], sumFixed: Fraction): FixedAssign[] {
 function applyRadd(
   fixed: FixedAssign[],
   spouseFraction: Fraction,
-  hasSpouse: boolean,
-  _rule: InheritanceRuleModule
+  hasSpouse: boolean
 ): FixedAssign[] {
   const nonSpouse = fixed.filter((f) => f.heir !== 'husband' && f.heir !== 'wife');
   const nonSpouseSum = sumF(nonSpouse.map((f) => f.fraction));
 
   if (nonSpouse.length === 0) {
-    // Sole-heir spouse: return everything to the spouse (diaspora default D2).
+    // Sole-heir spouse (only reached when raddToSpouseWhenSole is on) → the whole estate (D2).
     return fixed.map((f) => ({ ...f, fraction: ONE }));
   }
 
