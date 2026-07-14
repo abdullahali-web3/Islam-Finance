@@ -55,6 +55,15 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     enabled: true,
   },
   {
+    id: 'qurbani',
+    titleKey: 'home.card.qurbani',
+    icon: 'paw-outline',
+    route: '/calculator/qurbani',
+    learnArticleId: 'qurbani',
+    phase: 1,
+    enabled: true,
+  },
+  {
     id: 'prayer-times',
     titleKey: 'home.card.prayerTimes',
     icon: 'time-outline',
