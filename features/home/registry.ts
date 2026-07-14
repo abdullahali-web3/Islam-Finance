@@ -79,7 +79,7 @@ export const CALCULATORS: readonly CalculatorDescriptor[] = [
     route: '/calculator/prayer-times',
     learnArticleId: null,
     phase: 1,
-    enabled: false,
+    enabled: true,
   },
   {
     id: 'hijri',

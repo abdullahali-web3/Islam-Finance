@@ -3,6 +3,7 @@ import { persist, createJSONStorage, type StateStorage } from 'zustand/middlewar
 import { storage } from '@/services/storage';
 import type { CurrencyCode } from '@/core/shared';
 import type { NisabBasis } from '@/core/zakat';
+import type { PrayerMethodKey } from '@/core/prayer';
 
 export type Madhab = 'hanafi' | 'shafii' | 'maliki' | 'hanbali';
 export type Language = 'en' | 'ur';
@@ -26,6 +27,10 @@ type SettingsState = {
   nisabBasis: NisabBasis;
   /** Manual Hijri day adjustment (−2..+2) to align the algorithmic calendar with local sighting. */
   hijriAdjust: number;
+  /** Prayer-time calculation method. */
+  prayerMethod: PrayerMethodKey;
+  /** Last known location (cached so prayer times/qibla work offline after the first GPS fix). */
+  location: { lat: number; lng: number } | null;
   /** Registry ids the user has favorited (ADR 0006). Order = insertion order. */
   favorites: string[];
   /** False until the first-run onboarding flow completes; gates the onboarding redirect. */
@@ -36,6 +41,8 @@ type SettingsState = {
   setCurrency: (currency: CurrencyCode) => void;
   setNisabBasis: (nisabBasis: NisabBasis) => void;
   setHijriAdjust: (hijriAdjust: number) => void;
+  setPrayerMethod: (prayerMethod: PrayerMethodKey) => void;
+  setLocation: (location: { lat: number; lng: number } | null) => void;
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
   completeOnboarding: () => void;
@@ -50,6 +57,8 @@ export const useSettingsStore = create<SettingsState>()(
       currency: 'USD',
       nisabBasis: 'silver',
       hijriAdjust: 0,
+      prayerMethod: 'MuslimWorldLeague',
+      location: null,
       favorites: [],
       onboarded: false,
       setMadhab: (madhab) => set({ madhab }),
@@ -58,6 +67,8 @@ export const useSettingsStore = create<SettingsState>()(
       setCurrency: (currency) => set({ currency }),
       setNisabBasis: (nisabBasis) => set({ nisabBasis }),
       setHijriAdjust: (hijriAdjust) => set({ hijriAdjust }),
+      setPrayerMethod: (prayerMethod) => set({ prayerMethod }),
+      setLocation: (location) => set({ location }),
       toggleFavorite: (id) =>
         set((s) => ({
           favorites: s.favorites.includes(id)
@@ -78,6 +89,8 @@ export const useSettingsStore = create<SettingsState>()(
         currency: s.currency,
         nisabBasis: s.nisabBasis,
         hijriAdjust: s.hijriAdjust,
+        prayerMethod: s.prayerMethod,
+        location: s.location,
         favorites: s.favorites,
         onboarded: s.onboarded,
       }),
