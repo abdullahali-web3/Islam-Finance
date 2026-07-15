@@ -88,6 +88,10 @@ Anything the drafting agent was unsure of — never silently resolved.
 | zakat | research-provisional | 2026-07-13 | Cash, gold/silver (incl. jewelry), business inventory |
 | inheritance | research-provisional | 2026-07-13 | Fara'id: fixed shares, ḥajb, ʿAwl, Radd (+Bayt al-Māl divergence), grandfather+siblings, named cases |
 | fitrana | — | — | Zakat al-Fitr per-person amount |
+| livestock | research-provisional | 2026-07-15 | Zakāt al-Anʿām: camels/cattle/sheep-goats niṣāb tables, ḥawl + sāʾimah + ʿawāmil gates, camel>120 majority rule |
+| ushr | research-provisional | 2026-07-15 | Agricultural zakat: 10/5/7.5% by irrigation, 5-awsuq niṣāb (Hanafi none), harvest→ʿushr→value |
+| qada | research-provisional | 2026-07-15 | Missed prayers & fasts: 5/6 prayers/day (Witr Hanafi), menstruation exclusion, fasts 1-for-1 + fidya-for-delay |
+| purification | research-provisional | 2026-07-15 | Investment/dividend purification (AAOIFI SS 21): dividend×impure% or shares×impure/share; non-madhab |
 | qurbani | — | — | Udhiyah nisab eligibility check |
 | prayer-times-qibla | — | — | Prayer times + Qibla direction |
 | hijri-calendar | — | — | Gregorian ↔ Hijri conversion |
