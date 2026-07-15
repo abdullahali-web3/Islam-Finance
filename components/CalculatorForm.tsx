@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import {
   useForm,
+  useWatch,
   Controller,
   type DefaultValues,
   type FieldValues,
@@ -24,6 +26,12 @@ export type FieldConfig<T extends FieldValues> = {
   placeholder?: string;
   /** Required when type === 'select'. */
   options?: FieldOption[];
+  /**
+   * Optional predicate over the live form values — when it returns false the field is hidden.
+   * Hidden fields keep their default (valid) value, so they never block submission. Used by
+   * mode-based calculators (e.g. Qaḍāʾ prayers vs fasts) to show only the relevant inputs.
+   */
+  visibleIf?: (values: T) => boolean;
 };
 
 type CalculatorFormProps<T extends FieldValues> = {
@@ -50,6 +58,7 @@ export function CalculatorForm<T extends FieldValues>({
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<T>({
     // Zod v4's inferred input type is `unknown`, which won't unify with react-hook-form's
@@ -59,9 +68,28 @@ export function CalculatorForm<T extends FieldValues>({
     mode: 'onTouched',
   });
 
+  // Live values drive conditional field visibility (visibleIf). useWatch (not watch()) is the
+  // subscription hook that re-renders on change and stays compiler/lint-safe.
+  const values = useWatch({ control }) as T;
+  const visibleFields = fields.filter((field) => !field.visibleIf || field.visibleIf(values));
+
+  // A hidden field is still validated by the schema, so a cleared/invalid value on a now-hidden
+  // field would silently block submit with an error that can't render. Reset hidden fields to their
+  // (valid) defaults so visibility can never trap the form.
+  useEffect(() => {
+    const defaults = defaultValues as Record<string, unknown>;
+    const current = values as Record<string, unknown>;
+    for (const field of fields) {
+      const name = field.name as string;
+      if (field.visibleIf && !field.visibleIf(values) && current[name] !== defaults[name]) {
+        setValue(field.name, defaults[name] as never, { shouldValidate: false, shouldDirty: false });
+      }
+    }
+  }, [values, fields, defaultValues, setValue]);
+
   return (
     <View>
-      {fields.map((field) => (
+      {visibleFields.map((field) => (
         <Controller
           key={field.name}
           control={control}
