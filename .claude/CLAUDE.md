@@ -1,11 +1,14 @@
 # IslamFinance App
-Umbrella Islamic-calculations app (Zakat, inheritance, more). RN + Expo, offline-first, EAS/Play Store.
+Islamic super-app — 13 calculators (Zakat, inheritance, +11) plus (planned) Quran (text+audio),
+Hadith, learning, accounts. RN + Expo, Android-first, EAS/Play Store. Offline-first for calculators +
+bundled Quran text; Supabase backend for OPTIONAL accounts/sync. Scope + sequence: docs/roadmap.md.
 
 ## Rules
 - core/<domain>/: pure TS, zero RN imports. features/<domain>/: UI only, consumes core/ via its index.ts.
 - One Zod schema + generic <CalculatorForm/> per calculator. Never hand-build a form screen.
-- State: Zustand + MMKV (settings/cache, encrypted) + WatermelonDB (history). No secrets in client
-  code, ever — see docs/adr/0004-secrets.md.
+- State: Zustand + MMKV (settings/cache/history, encrypted). Supabase backend (auth + per-user sync,
+  optional login) behind the repository seam — ADR 0014/0015; WatermelonDB deferred. No secrets in
+  client code, ever (only Supabase's public anon key ships; RLS guards data) — ADR 0004.
 - Madhab logic: core/<domain>/madhab/<school>.ts behind a RuleModule interface. Never inline
   madhab if/else elsewhere.
 - i18n: react-i18next keys only, en + ur.
@@ -25,7 +28,9 @@ Every calculator passes qa-code-reviewer + qa-functional-tester (fresh agents, n
 Commit + push to GitHub at session end. No autonomous deploy/CI actions -- confirm with user first.
 
 ## Map
-docs/fiqh/, docs/adr/, .claude/agents/, .claude/skills/ -- see each's own README/index.
+docs/roadmap.md, docs/fiqh/, docs/adr/, .claude/agents/, .claude/skills/ -- see each's own README/index.
 
 ## Phase
-Currently: Phase 0 -- foundation.
+Currently: Phase 4 -- super-app pivot, define-first. Phases 0-3 done (13 calculators, all provisional).
+Roadmap + open decisions: docs/roadmap.md; new architecture in ADR 0014-0016. Device build still
+unproven (Metro never connected) -- the #1 blocker before Phase 4 feature code.
