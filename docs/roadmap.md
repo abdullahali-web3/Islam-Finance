@@ -44,9 +44,12 @@ public by design; Row-Level Security is the guard; no service keys ever ship.
    offline. (ADR 0008)
 
 ### Phase 5 — Content (the super-app core)
-4. **Quran module** — Arabic mushaf (bundled, offline), translations, per-ayah + per-surah **audio**
-   from multiple reciters, navigation/sort, bookmarks, reading progress, tafsir (later). (ADR 0016)
-5. **Hadith module** — major books via API, browse/search, bookmarks. (ADR 0016)
+4. **Quran module** — **Arabic mushaf first** (Tanzil Uthmani, bundled, offline, CC BY — cleared for
+   commercial use); navigation/sort, bookmarks, reading progress. **Translations, audio, and tafsir are
+   licence-blocked** and sit behind a provider seam until written permission exists — see the
+   licensing gate below and ADR 0016 (revised 2026-07-16).
+5. **Hadith module** — browse/search, bookmarks. Blocked on Sunnah.com approval; the previously assumed
+   "open fallback" still needs its own commercial-use check. (ADR 0016)
 6. **Learning material** — the Learn tab (currently empty — 0 articles exist) filled with
    scholar-signed content for the calculators + general topics.
 
@@ -75,10 +78,29 @@ Recorded now so the analysis isn't lost; the network choice is made near launch.
 - **Open question:** whether to add an optional one-time "supporter"/premium unlock later if ad
   revenue is too thin — currently out of scope (ads-only).
 
+## The licensing gate (run 2026-07-16 — FAILED except Arabic text)
+ADR 0016 made a commercial-use licence review a hard gate before Phase 5. It was run. Result: **ads-only
+monetization and Quran content licensing are in direct conflict** — an ad-supported free app is a
+*commercial* use, and the ecosystem's default sources are NonCommercial or permission-gated.
+- **Cleared:** Arabic Uthmani text (Tanzil, CC BY 3.0) — commercial OK, verbatim, attribution +
+  tanzil.net link required (a shipping requirement, not polish).
+- **Blocked:** Tanzil translations (NonCommercial) · EveryAyah audio (CC BY-NC) · Quran Foundation API
+  (1-week cache cap contradicts offline; commercial use needs a separate written licence) ·
+  Sunnah.com (approval-gated).
+- **Audio is per-reciter:** a recitation is a copyrighted *performance*; no API can license it on the
+  reciter's behalf.
+- **Not a shortcut:** public-domain Pickthall/Yusuf Ali carry US copyright exposure (Yusuf Ali to 2033).
+
+**Consequence:** Phase 5 ships an **Arabic-only reader** first; translations/audio follow permissions.
+**Your legwork, now on the critical path** (slow, external): written permission for translations
+(KFGQPC/QuranEnc), per-reciter audio permission, a Quran Foundation commercial licence + cache
+exemption, Sunnah.com approval.
+**Open:** whether ads-only survives contact with this — donation/paid funding would reopen NC sources.
+
 ## Open decisions / risks
 - Device build must connect (Phase 4.1) before anything else is buildable/testable.
-- Quran/Hadith **API selection, licensing, and rate limits** to confirm (ADR 0016). Sunnah.com API is
-  gated (needs approval).
+- **Ads-only vs. Quran content licensing** — the conflict above; unresolved, and it shapes Phase 5's
+  product ceiling (an Arabic-only Quran is a real gap vs Islam360/Muslim Pro).
 - Sync **conflict model** (last-write-wins per record) — confirm acceptable (ADR 0015).
 - **Gold/silver price cold-start offline** (no cache yet + offline): bundled seed price vs. a
   "connect once" blocked state — no manual entry either way (ADR 0008).
